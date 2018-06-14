@@ -82,20 +82,20 @@ resource "aws_security_group" "out" {
   }
 }
 
-resource "aws_security_group" "proxy" {
-  name        = "squid-proxy"
-  description = "allow inbound tcp at 3128"
-  vpc_id      = "${aws_vpc.main.id}"
+#resource "aws_security_group" "proxy" {
+#  name        = "squid-proxy"
+#  description = "allow inbound tcp at 3128"
+#  vpc_id      = "${aws_vpc.main.id}"
 
-  ingress {
-    from_port   = 0
-    to_port     = 3128
-    protocol    = "TCP"
-    cidr_blocks = ["172.${var.vpc_octet2}.${var.vpc_octet3}.0/20", "${var.csoc_cidr}"]
-  }
+ # ingress {
+ #   from_port   = 0
+ #   to_port     = 3128
+ #   protocol    = "TCP"
+ #   cidr_blocks = ["172.${var.vpc_octet2}.${var.vpc_octet3}.0/20", "${var.csoc_cidr}"]
+ # }
 
-  tags {
-    Environment  = "${var.vpc_name}"
-    Organization = "Basic Service"
-  }
-}
+  #tags {
+   # Environment  = "${var.vpc_name}"
+   # Organization = "Basic Service"
+  #}
+#}

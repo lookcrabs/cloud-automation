@@ -81,14 +81,16 @@ resource "aws_route_table" "private_kube" {
 
   route {
     cidr_block  = "0.0.0.0/0"
-    instance_id = "${module.cdis_vpc.proxy_id}"
-  }
-
-  route {
-    # cloudwatch logs route
-    cidr_block     = "54.224.0.0/12"
+    #We dont need route via squid proxy; let default route go via the nat gw; egress restriction at the secgroup level
+    #instance_id = "${module.cdis_vpc.proxy_id}"
     nat_gateway_id = "${module.cdis_vpc.nat_gw_id}"
   }
+#We dont need this route as we going to add a default route via the nat gw; egress restriction at the secgroup level
+  #route {
+    # cloudwatch logs route
+   # cidr_block     = "54.224.0.0/12"
+    #nat_gateway_id = "${module.cdis_vpc.nat_gw_id}"
+  #}
 
   route {
     #from the commons vpc to the csoc vpc via the peering connection

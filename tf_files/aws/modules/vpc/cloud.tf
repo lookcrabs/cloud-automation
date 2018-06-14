@@ -1,14 +1,14 @@
-module "squid_proxy" {
-  source               = "../squid"
-  csoc_cidr            = "${var.csoc_cidr}"
-  env_vpc_name         = "${var.vpc_name}"
-  env_public_subnet_id = "${aws_subnet.public.id}"
-  env_vpc_cidr         = "${aws_vpc.main.cidr_block}"
-  env_vpc_id           = "${aws_vpc.main.id}"
-  ssh_key_name         = "${var.ssh_key_name}"
-  env_instance_profile = "${aws_iam_instance_profile.cluster_logging_cloudwatch.name}"
-  env_log_group        = "${aws_cloudwatch_log_group.main_log_group.name}"
-}
+#module "squid_proxy" {
+ # source               = "../squid"
+  #csoc_cidr            = "${var.csoc_cidr}"
+  #env_vpc_name         = "${var.vpc_name}"
+  #env_public_subnet_id = "${aws_subnet.public.id}"
+  #env_vpc_cidr         = "${aws_vpc.main.cidr_block}"
+  #env_vpc_id           = "${aws_vpc.main.id}"
+  #ssh_key_name         = "${var.ssh_key_name}"
+  #env_instance_profile = "${aws_iam_instance_profile.cluster_logging_cloudwatch.name}"
+  #env_log_group        = "${aws_cloudwatch_log_group.main_log_group.name}"
+#}
 
 resource "aws_vpc" "main" {
   cidr_block           = "172.${var.vpc_octet2}.${var.vpc_octet3}.0/20"
@@ -82,14 +82,17 @@ resource "aws_route_table" "private_user" {
 
   route {
     cidr_block  = "0.0.0.0/0"
-    instance_id = "${module.squid_proxy.squid_id}"
-  }
-
-  route {
-    # cloudwatch logs route
-    cidr_block     = "54.224.0.0/12"
+    #We dont need route via squid proxy; let default route go via the nat gw; egress restriction at the secgroup level
+    #instance_id = "${module.squid_proxy.squid_id}"
     nat_gateway_id = "${aws_nat_gateway.nat_gw.id}"
   }
+
+#We dont need this route as we going to add a default route via the nat gw; egress restriction at the secgroup level
+  #route {
+    # cloudwatch logs route
+   # cidr_block     = "54.224.0.0/12"
+    #nat_gateway_id = "${aws_nat_gateway.nat_gw.id}"
+  #}
 
   route {
     #from the commons vpc to the csoc vpc via the peering connection
@@ -276,12 +279,13 @@ resource "aws_route53_zone" "main" {
   }
 }
 
-resource "aws_route53_record" "squid" {
-  zone_id = "${aws_route53_zone.main.zone_id}"
-  name    = "cloud-proxy"
-  type    = "A"
-  ttl     = "300"
-  records = ["${module.squid_proxy.squid_private_ip}"]
+# The DNS record for cloud-proxy.internal.io will be added when we spin up the squidNLB cluster for the commons
+#resource "aws_route53_record" "squid" {
+#  zone_id = "${aws_route53_zone.main.zone_id}"
+#  name    = "cloud-proxy"
+#  type    = "A"
+#  ttl     = "300"
+#  records = ["${module.squid_proxy.squid_private_ip}"]
 }
 
 # this is for vpc peering
