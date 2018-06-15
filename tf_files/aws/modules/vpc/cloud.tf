@@ -80,19 +80,18 @@ resource "aws_eip" "nat_gw" {
 resource "aws_route_table" "private_user" {
   vpc_id = "${aws_vpc.main.id}"
 
-  route {
-    cidr_block  = "0.0.0.0/0"
-    #We dont need route via squid proxy; let default route go via the nat gw; egress restriction at the secgroup level
-    #instance_id = "${module.squid_proxy.squid_id}"
-    nat_gateway_id = "${aws_nat_gateway.nat_gw.id}"
-  }
-
-#We dont need this route as we going to add a default route via the nat gw; egress restriction at the secgroup level
+# The default route via the squid-proxy NLB will be created when the squid-proxy cluster is launched
   #route {
-    # cloudwatch logs route
-   # cidr_block     = "54.224.0.0/12"
+  #  cidr_block  = "0.0.0.0/0"
+    #instance_id = "${module.squid_proxy.squid_id}"
     #nat_gateway_id = "${aws_nat_gateway.nat_gw.id}"
   #}
+
+  route {
+    # cloudwatch logs route
+    cidr_block     = "54.224.0.0/12"
+    nat_gateway_id = "${aws_nat_gateway.nat_gw.id}"
+  }
 
   route {
     #from the commons vpc to the csoc vpc via the peering connection
@@ -286,7 +285,7 @@ resource "aws_route53_zone" "main" {
 #  type    = "A"
 #  ttl     = "300"
 #  records = ["${module.squid_proxy.squid_private_ip}"]
-}
+#}
 
 # this is for vpc peering
 resource "aws_vpc_peering_connection" "vpcpeering" {
