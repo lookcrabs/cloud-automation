@@ -39,6 +39,12 @@ variable "env_public_subnet_routetable_id" {
   default = "rtb-23b6685f"
 }
 
+variable "env_private_kube_subnet_routetable_id" {
+}
+
+variable "env_private_user_subnet_routetable_id" {
+}
+
 
 
 # name of aws_key_pair ssh key to attach to VM's

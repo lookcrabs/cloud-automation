@@ -20,6 +20,8 @@ module "squid_nlb" {
   ami_account_id   = "${var.ami_account_id}"
   csoc_cidr        = "${var.csoc_cidr}"
   env_public_subnet_routetable_id = "${var.env_public_subnet_routetable_id}"
+  env_private_kube_subnet_routetable_id = "${var.env_private_kube_subnet_routetable_id}"
+  env_private_user_subnet_routetable_id = "${var.env_private_user_subnet_routetable_id}"
   ssh_key_name     = "${var.ssh_key_name}"
   allowed_principals_list  = "${var.allowed_principals_list}"
   bootstrap_path = "${var.bootstrap_path}"

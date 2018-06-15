@@ -292,6 +292,8 @@ EOM
   env_nlb_name                  = "NLB SETUP NAME"
   env_vpc_id                    = "COMMONS VPC-ID"
   env_public_subnet_routetable_id = "COMMONS ROUTE TABLE (MAIN) ID  - HAVING ROUTE TO INTERNET GW"
+  env_private_user_subnet_routetable_id = "COMMONS ROUTE TABLE (PRIVATE_USER) ID  - NEEDS DEFAULT ROUTE TO SQUIDNLB SETUP"
+  env_private_kube_subnet_routetable_id = "COMMONS ROUTE TABLE (PRIVATE_KUBE) ID  - NEEDS DEFAULT ROUTE TO SQUIDNLB SETUP"
   commons_internal_dns_zone_id  = "PUT IT AS `ZA1HVV5W0QBG1` IF LAUNCHING THE SQUID NLB IN CSOC MAIN VPC"
   # allowed_principals_list       = "[LIST OF AWS ACCOUNTS WHICH NEEDS TO BE WHITELISTED]"
   # e.g. of the list - ["arn:aws:iam::<AWS ACCOUNT1 ID>:root","arn:aws:iam::<AWS ACCOUNT2 ID>:root", ...]

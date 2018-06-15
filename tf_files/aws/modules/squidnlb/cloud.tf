@@ -110,7 +110,27 @@ resource "aws_route_table_association" "squid_nlb2" {
   route_table_id = "${var.env_public_subnet_routetable_id}"
 }
 
+#Adding default routes via squid-proxy NLB for "private_kube" and "private_user" route tables
+resource "aws_route" "private_kube" {
+  route_table_id            = "${var.env_private_kube_subnet_routetable_id}"
+  destination_cidr_block    = "0.0.0.0/0"
+  network_interface_id = "aws_lb.squid_nlb.id"
+}
 
+#Adding default routes via squid-proxy NLB for "private_user" and "private_user" route tables
+resource "aws_route" "private_user" {
+  route_table_id            = "${var.env_private_user_subnet_routetable_id}"
+  destination_cidr_block    = "0.0.0.0/0"
+  network_interface_id = "aws_lb.squid_nlb.id"
+}
+
+resource "aws_network_interface" "squidnlb" {
+ 
+ attachment {
+    instance     = "${aws_instance.test.id}"
+    device_index = 1
+  }
+}
 
 
 # launching the network load balancer for the squid VMs
