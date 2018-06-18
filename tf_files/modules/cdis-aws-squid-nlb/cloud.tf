@@ -85,21 +85,21 @@ resource "aws_subnet" "squid_pub0" {
   vpc_id                  = "${var.env_vpc_id}"
   cidr_block              = "10.128.${var.env_vpc_octet3}.0/27"
   availability_zone = "${data.aws_availability_zones.available.names[0]}"
-  tags                    = "${map("Name", "${var.env_nlb_name}_priv0", "Organization", "Basic Service", "Environment", var.env_nlb_name)}"
+  tags                    = "${map("Name", "${var.env_nlb_name}_pub0", "Organization", "Basic Service", "Environment", var.env_nlb_name)}"
 }
 
 resource "aws_subnet" "squid_pub1" {
   vpc_id                  = "${var.env_vpc_id}"
   cidr_block              = "10.128.${var.env_vpc_octet3}.32/27"
   availability_zone = "${data.aws_availability_zones.available.names[1]}"
-  tags                    = "${map("Name", "${var.env_nlb_name}_priv1", "Organization", "Basic Service", "Environment", var.env_nlb_name)}"
+  tags                    = "${map("Name", "${var.env_nlb_name}_pub1", "Organization", "Basic Service", "Environment", var.env_nlb_name)}"
 }
 
 resource "aws_subnet" "squid_pub2" {
   vpc_id                  = "${var.env_vpc_id}"
   cidr_block              = "10.128.${var.env_vpc_octet3}.64/27"
   availability_zone = "${data.aws_availability_zones.available.names[2]}"
-  tags                    = "${map("Name", "${var.env_nlb_name}_priv2", "Organization", "Basic Service", "Environment", var.env_nlb_name)}"
+  tags                    = "${map("Name", "${var.env_nlb_name}_pub2", "Organization", "Basic Service", "Environment", var.env_nlb_name)}"
 }
 
 
@@ -206,6 +206,7 @@ resource "aws_launch_configuration" "squid_nlb" {
   security_groups = ["${aws_security_group.squidnlb_in.id}", "${aws_security_group.squidnlb_out.id}"]
   key_name = "${var.ssh_key_name}"
   iam_instance_profile   = "${aws_iam_instance_profile.squid-nlb_role_profile.id}"
+  associate_public_ip_address = true
 
   depends_on = ["aws_iam_instance_profile.squid-nlb_role_profile"]
 
