@@ -32,8 +32,8 @@ variable "csoc_cidr" {
 
 
 
-variable "env_priv_subnet_routetable_id" {
-  default = "rtb-23b6685f"
+variable "env_pub_subnet_routetable_id" {
+  default = "rtb-1cb66860"
 }
 
 
@@ -55,11 +55,11 @@ variable "allowed_principals_list" {
 
 ## variable for the bootstrap 
 variable "bootstrap_path" {
-  default = "cloud-automation/flavors/nginx/"
+  default = "cloud-automation/flavors/squid_nlb/"
 }
 
 variable "bootstrap_script" {
-  #default = "es_revproxy.sh"
+  default = "squidvm.sh"
 }
 
 variable "csoc_internal_dns_zone_id"{

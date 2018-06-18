@@ -52,13 +52,13 @@ data "aws_iam_policy_document" "squid_policy_document" {
     resources = ["*"]
   }
 
-statement {
+#statement {
     # see https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_permissions-to-switch.html
-    actions = ["sts:AssumeRole"]
+ #   actions = ["sts:AssumeRole"]
 
-    effect    = "Allow"
-    resources = ["arn:aws:iam::${var.aws_account_id}:role/csoc_adminvm"]
-  }
+  #  effect    = "Allow"
+   # resources = ["arn:aws:iam::${var.aws_account_id}:role/csoc_adminvm"]
+ # }
 
 }
 
@@ -127,32 +127,32 @@ resource "aws_subnet" "squid_priv5" {
 resource "aws_route_table_association" "squid_nlb0" {
   #subnet_id      = ["${aws_subnet.squid_priv0.id}, ${aws_subnet.squid_priv1.id},${aws_subnet.squid_priv2.id},${aws_subnet.squid_priv3.id},${aws_subnet.squid_priv4.id},${aws_subnet.squid_priv5.id}"]
   subnet_id      = "${aws_subnet.squid_priv0.id}"
-  route_table_id = "${var.env_priv_subnet_routetable_id}"
+  route_table_id = "${var.env_pub_subnet_routetable_id}"
 }
 
 resource "aws_route_table_association" "squid_nlb1" {
   subnet_id      = "${aws_subnet.squid_priv1.id}"
-  route_table_id = "${var.env_priv_subnet_routetable_id}"
+  route_table_id = "${var.env_pub_subnet_routetable_id}"
 }
 
 resource "aws_route_table_association" "squid_nlb2" {
   subnet_id      = "${aws_subnet.squid_priv2.id}"
-  route_table_id = "${var.env_priv_subnet_routetable_id}"
+  route_table_id = "${var.env_pub_subnet_routetable_id}"
 }
 
 resource "aws_route_table_association" "squid_nlb3" {
   subnet_id      = "${aws_subnet.squid_priv3.id}"
-  route_table_id = "${var.env_priv_subnet_routetable_id}"
+  route_table_id = "${var.env_pub_subnet_routetable_id}"
 }
 
 resource "aws_route_table_association" "squid_nlb4" {
   subnet_id      = "${aws_subnet.squid_priv4.id}"
-  route_table_id = "${var.env_priv_subnet_routetable_id}"
+  route_table_id = "${var.env_pub_subnet_routetable_id}"
 }
 
 resource "aws_route_table_association" "squid_nlb5" {
   subnet_id      = "${aws_subnet.squid_priv5.id}"
-  route_table_id = "${var.env_priv_subnet_routetable_id}"
+  route_table_id = "${var.env_pub_subnet_routetable_id}"
 }
 
 
