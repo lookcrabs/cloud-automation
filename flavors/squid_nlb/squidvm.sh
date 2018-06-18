@@ -1,9 +1,8 @@
 #!/bin/bash
 
-##proxy v4 set-up
+SUB_FOLDER="/home/ubuntu/cloud-automation/"
+MAGIC_URL="http://169.254.169.254/latest/meta-data/"
 
-#sudo sed -i '/proxy/ d' /etc/environment
-#sudo rm /etc/apt/apt.conf.d/01proxy
 
 cd /home/ubuntu
 sudo apt-get update
@@ -12,16 +11,16 @@ wget http://www.squid-cache.org/Versions/v4/squid-4.0.24.tar.xz
 tar -xJf squid-4.0.24.tar.xz
 mkdir squid-build
 
-git clone https://github.com/uc-cdis/images.git
 
-cp /home/ubuntu/images/configs/ftp_whitelist /tmp/ftp_whitelist
-cp /home/ubuntu/images/configs/web_whitelist /tmp/web_whitelist
-cp /home/ubuntu/images/configs/web_wildcard_whitelist /tmp/web_wildcard_whitelist
-cp /home/ubuntu/images/configs/squid.conf /tmp/squid.conf
-cp /home/ubuntu/images/configs/squid-build.sh /home/ubuntu/squid-build/squid-build.sh
-cp /home/ubuntu/images/configs/iptables.conf /tmp/iptables.conf
-cp /home/ubuntu/images/configs/iptables-rules /tmp/iptables-rules
-cp /home/ubuntu/images/configs/squid.service /tmp/squid.service
+
+sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/ftp_whitelist /tmp/ftp_whitelist
+sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/web_whitelist /tmp/web_whitelist
+sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/web_wildcard_whitelist /tmp/web_wildcard_whitelist
+sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/squid.conf /tmp/squid.conf
+sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/squid-build.sh /home/ubuntu/squid-build/squid-build.sh
+sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/iptables.conf /tmp/iptables.conf
+sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/iptables-rules /tmp/iptables-rules
+sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/squid.service /tmp/squid.service
 
 cd /home/ubuntu/squid-build/
 sudo sed -i -e 's/squid-3.5.26/squid-4.0.24/g' squid-build.sh
@@ -58,8 +57,7 @@ sudo service squid stop
 sudo service squid start
 
 ## Logging set-up
-SUB_FOLDER="/home/ubuntu/cloud-automation/"
-MAGIC_URL="http://169.254.169.254/latest/meta-data/"
+
 #Getting the account details
 sudo apt install -y curl jq python-pip apt-transport-https ca-certificates software-properties-common fail2ban libyaml-dev
 sudo pip install --upgrade pip
