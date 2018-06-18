@@ -126,6 +126,10 @@ systemctl restart awslogs
 # Copy the authorized keys for the admin user
 sudo cp /home/ubuntu/cloud-automation/flavors/squid_nlb/authorized_keys_admin /home/ubuntu/.ssh/authorized_keys
 
+#Copy the updatewhitelist.sh script  
+sudo cp /home/ubuntu/cloud-automation/flavors/squid_nlb/updatewhitelist.sh /home/ubuntu/updatewhitelist.sh
+
+
 ## create a sftp user  and copy the key of the sftp user
 sudo useradd -m -s /bin/bash sftpuser
 sudo mkdir /home/sftpuser/.ssh
@@ -138,45 +142,6 @@ sudo cp /home/sftpuser/cloud-automation/flavors/squid_nlb/authorized_keys_user /
 
 
 
-cat >> /home/ubuntu/updatewhitelist.sh << 'EOF'
-#!/bin/bash
-
-cd /home/ubuntu/cloud-automation
-git pull
-
-DIFF_AUTH1=$(diff "/home/ubuntu/cloud-automation/flavors/squid_nlb/authorized_keys_admin" "/home/ubuntu/.ssh/authorized_keys")
-DIFF_AUTH2=$(diff "/home/sftpuser/cloud-automation/flavors/squid_nlb/authorized_keys_user" "/home/sftpuser/.ssh/authorized_keys")
-
-DIFF_SQUID1=$(diff "/home/ubuntu/cloud-automation/flavors/squid_nlb/web_whitelist" "/etc/squid/web_whitelist")
-DIFF_SQUID2=$(diff "/home/ubuntu/cloud-automation/flavors/squid_nlb/web_wildcard_whitelist" "/etc/squid/web_wildcard_whitelist")
-DIFF_SQUID3=$(diff "/home/ubuntu/cloud-automation/flavors/squid_nlb/ftp_whitelist" "/etc/squid/ftp_whitelist")
-
-if [ "$DIFF_AUTH1" != ""  ] ; then
-rsync -a /home/ubuntu/cloud-automation/flavors/squid_nlb/authorized_keys_admin /home/ubuntu/.ssh/authorized_keys
-fi
-
-if [ "$DIFF_AUTH2" != ""  ] ; then
-rsync -a /home/sftpuser/cloud-automation/flavors/squid_nlb/authorized_keys_user /home/ubuntu/.ssh/authorized_keys
-fi
-
-
-if [ "$DIFF_SQUID1" != ""  ] ; then
-rsync -a /home/ubuntu/cloud-automation/flavors/squid_nlb/web_whitelist /etc/squid/web_whitelist
-fi
-
-if [ "$DIFF_SQUID2" != ""  ] ; then
-rsync -a /home/ubuntu/cloud-automation/flavors/squid_nlb/web_wildcard_whitelist /etc/squid/web_wildcard_whitelist
-fi
-
-if [ "$DIFF_SQUID3" != ""  ] ; then
-rsync -a /home/ubuntu/cloud-automation/flavors/squid_nlb/ftp_whitelist /etc/squid/ftp_whitelist
-fi
-
-if ([ "$DIFF_SQUID1" != "" ]  ||  [ "$DIFF_SQUID2" != "" ] || [ "$DIFF_SQUID3" != "" ]) ; then
-sudo service squid reload
-fi
-
-EOF
 
 sudo chmod +x /home/ubuntu/updatewhitelist.sh
 
