@@ -83,8 +83,7 @@ resource "aws_route_table" "private_user" {
   route {
     cidr_block  = "0.0.0.0/0"
     instance_id = "${module.squid_proxy.squid_id}"
-    #network_interface_id ="${aws_vpc_endpoint.squid-nlb.network_interface_ids[0]}"
-    #network_interface_id ="eni-537bf5d1"
+    #nat_gateway_id = "${aws_nat_gateway.nat_gw.id}"
   }
 
   route {
