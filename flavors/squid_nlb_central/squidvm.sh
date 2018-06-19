@@ -13,14 +13,14 @@ mkdir squid-build
 
 
 
-sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/ftp_whitelist /tmp/ftp_whitelist
-sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/web_whitelist /tmp/web_whitelist
-sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/web_wildcard_whitelist /tmp/web_wildcard_whitelist
-sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/squid.conf /tmp/squid.conf
-sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/squid-build.sh /home/ubuntu/squid-build/squid-build.sh
-sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/iptables.conf /tmp/iptables.conf
-sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/iptables-rules /tmp/iptables-rules
-sudo cp ${SUB_FOLDER}flavors/squid_nlb/startup_configs/squid.service /tmp/squid.service
+sudo cp ${SUB_FOLDER}flavors/squid_nlb_central/startup_configs/ftp_whitelist /tmp/ftp_whitelist
+sudo cp ${SUB_FOLDER}flavors/squid_nlb_central/startup_configs/web_whitelist /tmp/web_whitelist
+sudo cp ${SUB_FOLDER}flavors/squid_nlb_central/startup_configs/web_wildcard_whitelist /tmp/web_wildcard_whitelist
+sudo cp ${SUB_FOLDER}flavors/squid_nlb_central/startup_configs/squid.conf /tmp/squid.conf
+sudo cp ${SUB_FOLDER}flavors/squid_nlb_central/startup_configs/squid-build.sh /home/ubuntu/squid-build/squid-build.sh
+sudo cp ${SUB_FOLDER}flavors/squid_nlb_central/startup_configs/iptables.conf /tmp/iptables.conf
+sudo cp ${SUB_FOLDER}flavors/squid_nlb_central/startup_configs/iptables-rules /tmp/iptables-rules
+sudo cp ${SUB_FOLDER}flavors/squid_nlb_central/startup_configs/squid.service /tmp/squid.service
 
 cd /home/ubuntu/squid-build/
 sudo sed -i -e 's/squid-3.5.26/squid-4.0.24/g' squid-build.sh
@@ -49,7 +49,7 @@ sudo chown -R proxy:proxy /var/log/squid /var/cache/squid
 
 ## Enable the Support for proxy protocol on the squid
 sudo mv /etc/squid/squid.conf /etc/squid/squid_original.conf
-sudo cp /home/ubuntu/cloud-automation/flavors/squid_nlb/squid_proxyprotocol.conf /etc/squid/squid.conf
+sudo cp /home/ubuntu/cloud-automation/flavors/squid_nlb_central/squid_proxyprotocol.conf /etc/squid/squid.conf
 
 ## Enable the squid service
 sudo systemctl enable squid
@@ -90,9 +90,9 @@ sudo chown ubuntu:ubuntu -R /home/ubuntu
 sudo wget -O /tmp/awslogs-agent-setup.py https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py
 sudo chmod 775 /tmp/awslogs-agent-setup.py
 sudo mkdir -p /var/awslogs/etc/
-sudo cp ${SUB_FOLDER}/flavors/squid_nlb/awslogs.conf /var/awslogs/etc/awslogs.conf
+sudo cp ${SUB_FOLDER}/flavors/squid_nlb_central/awslogs.conf /var/awslogs/etc/awslogs.conf
 curl -s ${MAGIC_URL}placement/availability-zone > /tmp/EC2_AVAIL_ZONE
-sudo ${PYTHON} /tmp/awslogs-agent-setup.py --region=$(awk '{print substr($0, 1, length($0)-1)}' /tmp/EC2_AVAIL_ZONE) --non-interactive -c ${SUB_FOLDER}flavors/squid_nlb/awslogs.conf
+sudo ${PYTHON} /tmp/awslogs-agent-setup.py --region=$(awk '{print substr($0, 1, length($0)-1)}' /tmp/EC2_AVAIL_ZONE) --non-interactive -c ${SUB_FOLDER}flavors/squid_nlb_central/awslogs.conf
 sudo systemctl disable awslogs
 sudo chmod 644 /etc/init.d/awslogs
 
@@ -122,10 +122,10 @@ systemctl enable awslogs
 systemctl restart awslogs
 
 # Copy the authorized keys for the admin user
-sudo cp /home/ubuntu/cloud-automation/flavors/squid_nlb/authorized_keys_admin /home/ubuntu/.ssh/authorized_keys
+sudo cp /home/ubuntu/cloud-automation/flavors/squid_nlb_central/authorized_keys_admin /home/ubuntu/.ssh/authorized_keys
 
 #Copy the updatewhitelist.sh script  
-sudo cp /home/ubuntu/cloud-automation/flavors/squid_nlb/updatewhitelist.sh /home/ubuntu/updatewhitelist.sh
+sudo cp /home/ubuntu/cloud-automation/flavors/squid_nlb_central/updatewhitelist.sh /home/ubuntu/updatewhitelist.sh
 
 
 ## create a sftp user  and copy the key of the sftp user
@@ -134,7 +134,7 @@ sudo mkdir /home/sftpuser/.ssh
 sudo chmod 700 /home/sftpuser/.ssh
 sudo cp -rp /home/ubuntu/cloud-automation /home/sftpuser
 sudo chown -R sftpuser. /home/sftpuser
-sudo cp /home/sftpuser/cloud-automation/flavors/squid_nlb/authorized_keys_user /home/sftpuser/.ssh/authorized_keys
+sudo cp /home/sftpuser/cloud-automation/flavors/squid_nlb_central/authorized_keys_user /home/sftpuser/.ssh/authorized_keys
 
 
 
