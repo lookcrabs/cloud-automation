@@ -11,7 +11,7 @@ provider "aws" {
 }
 
 module "squid_nlb" {
-  source           = "../modules/cdis-aws-squid-nlb"
+  source           = "../modules/squid_nlb_central_csoc"
   env_vpc_octet3   = "${var.env_vpc_octet3}"
   env_vpc_id       = "${var.env_vpc_id}"
   env_nlb_name     = "${var.env_nlb_name}"
