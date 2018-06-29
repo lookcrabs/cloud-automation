@@ -300,6 +300,30 @@ data:
               send_timeout 300;
               proxy_pass http://sheepdog-service/;
           }
+          location /wts {
+              if ($csrf_check !~ ^ok-\S.+$) {
+                return 403 "failed csrf check";
+              }
+              if ($cookie_csrftoken = "") {
+                add_header Set-Cookie "csrftoken=$request_id$request_length$request_time$time_iso8601;Path=/";
+              }
+
+              proxy_next_upstream off;
+              proxy_set_header   Host $host;
+              proxy_set_header   Authorization "$access_token";
+              proxy_set_header   X-Forwarded-For "$realip";
+              proxy_set_header   X-UserId "$userid";
+              proxy_connect_timeout 300;
+              proxy_send_timeout 300;
+              proxy_read_timeout 300;
+              send_timeout 300;
+              # Use this variable so nginx won't error out on start
+              set $upstream_host http://workspace-token-service.$namespace.svc.cluster.local;
+              rewrite ^/wts/(.*) /$1 break;
+              proxy_pass $upstream_host;
+          }
+
+
 
           # This works if the JupyterHub service is enabled
           # The JupyterHub service is set to use REMOTE_USER auth
