@@ -1,0 +1,57 @@
+# Note: change to batch/v1beta1 once we bump to k8s 1.8
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-dict
+spec:
+  schedule: "@hourly"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: gen3job
+        spec:
+          serviceAccountName: update-dict-job
+          volumes:
+            - name: shared-data
+              emptyDir: {}
+          #   - name: config-helper
+          #     configMap:
+          #       name: config-helper
+          containers:
+            # - name: awshelper
+            #   image: quay.io/cdis/awshelper:master
+            - name: cronjob-test
+              image: alpine:3.7
+              imagePullPolicy: Always
+              volumeMounts:
+                - name: shared-data
+                  mountPath: /mnt/shared
+              command: ["/bin/bash" ]
+              args:
+                - "-c"
+                - |
+                  date
+                # aws s3 cp s3://dictionary-artifacts/datadictionary/develop/schema.json .
+                #   echo "awshelper downloading ${}"
+                  echo "Helper exit code: $?"
+              env:
+                - name: userYamlS3Path
+                  valueFrom:
+                      configMapKeyRef:
+                        name: global
+                        key: useryaml_s3path
+                - name: gen3Env
+                  valueFrom:
+                      configMapKeyRef:
+                        name: global
+                        key: environment
+                # - name: slackWebHook
+                #   valueFrom:
+                #       configMapKeyRef:
+                #         name: global
+                #         key: slack_webhook
+            restartPolicy: Never
