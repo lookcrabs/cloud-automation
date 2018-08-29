@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   name: update-dict
 spec:
-  schedule: "*/5 * * * *"
+  schedule: "*/1 * * * *"
   successfulJobsHistoryLimit: 2
   failedJobsHistoryLimit: 2
   jobTemplate:
@@ -22,8 +22,6 @@ spec:
           containers:
             - name: awshelper
               image: quay.io/cdis/awshelper:master
-            # - name: cronjob-test
-            #   image: alpine:3.7
               imagePullPolicy: Always
               volumeMounts:
                 - name: shared-data
