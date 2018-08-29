@@ -4,7 +4,7 @@ kind: CronJob
 metadata:
   name: update-dict
 spec:
-  schedule: "15 12 * * *"
+  schedule: "*/5 * * * *"
   successfulJobsHistoryLimit: 2
   failedJobsHistoryLimit: 2
   jobTemplate:
