@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: update-dict
+spec:
+  template:
+    metadata:
+      labels:
+        app: gen3job
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: update-dict-job
+      volumes:
+        - name: shared-data
+          emptyDir: {}
+      containers:
+        - name: awshelper
+          image: quay.io/cdis/awshelper:master
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: shared-data
+              mountPath: /mnt/shared
+          env:
+            - name: userYamlS3Path
+              valueFrom:
+                configMapKeyRef:
+                  name: global
+                  key: useryaml_s3path
+            - name: gen3Env
+              valueFrom:
+                configMapKeyRef:
+                  name: global
+                  key: environment
+          command: ["/bin/bash" ]
+          args:
+            - "-c"
+            - |
+              date
+              echo "done"
