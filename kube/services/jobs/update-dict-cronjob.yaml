@@ -16,22 +16,16 @@ spec:
         spec:
           restartPolicy: OnFailure
           serviceAccountName: update-dict-job
-          volumes:
-            - name: shared-data
-              emptyDir: {}
           containers:
             - name: awshelper
               image: quay.io/cdis/awshelper:master
               imagePullPolicy: Always
-              volumeMounts:
-                - name: shared-data
-                  mountPath: /mnt/shared
               env:
-                - name: userYamlS3Path
+                - name: oldUrl
                   valueFrom:
                     configMapKeyRef:
-                      name: global
-                      key: useryaml_s3path
+                      name: manifest_global
+                      key: dictionary_url
                 - name: gen3Env
                   valueFrom:
                     configMapKeyRef:
@@ -41,5 +35,11 @@ spec:
               args:
                 - "-c"
                 - |
-                  date
+                  let currentUrl=$(g3k_config_lookup ".global.dictionary_url")
+                  echo $currentUrl
+                  echo $oldUrl
+                  if [[ $currentUrl != $oldUrl ]]; then
+                    g3kubectl patch configmap manifest_global -p ""
+                    gen3 kube-roll-all
+                  fi
                   echo "done"
