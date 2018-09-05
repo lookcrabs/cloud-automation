@@ -42,4 +42,4 @@ spec:
                     g3kubectl patch configmap manifest_global -p ""
                     gen3 kube-roll-all
                   fi
-                  echo "done"
+                  echo "Exit code: $?"
