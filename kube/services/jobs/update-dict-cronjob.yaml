@@ -42,10 +42,8 @@ spec:
                   echo $oldUrl
                   if [[ $newUrl != $oldUrl ]]; then
                     echo "Dictionary URLs are different updating dictionary"
-                    kubectl get pods
-                    g3kubectl get pods
-                    # g3kubectl patch configmap manifest-global -p '{"data":{"dictionary_url": $newUrl}}'
-                    # gen3 kube-roll-all
+                    g3kubectl patch configmap manifest-global -p '{"data":{"dictionary_url": "$newUrl"}}'
+                    gen3 kube-roll-all
                   else
                     echo "Dictionary URLs are the same, skipping dictionary update"
                   fi
