@@ -12,7 +12,7 @@ spec:
       serviceAccountName: update-dict-job
       containers:
         - name: awshelper
-          image: quay.io/cdis/awshelper:master
+          image: quay.io/cdis/awshelper:feat_update-dict
           imagePullPolicy: Always
           env:
             - name: oldUrl
