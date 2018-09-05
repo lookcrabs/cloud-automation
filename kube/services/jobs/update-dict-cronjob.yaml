@@ -15,7 +15,7 @@ spec:
             app: gen3job
         spec:
           restartPolicy: Never
-          serviceAccountName: update-dict-job
+          serviceAccountName: useryaml-job
           containers:
             - name: awshelper
               image: quay.io/cdis/awshelper:feat_update-dict

@@ -67,7 +67,7 @@ RUN git clone https://github.com/uc-cdis/gen3-arranger.git ~/gen3-arranger \
     && echo "export ESHOST=esproxy-service:9200" >> ~/.bashrc
 
 # install and set up gen3
-RUN git clone https://github.com/uc-cdis/cloud-automation.git \
+RUN git clone https://github.com/uc-cdis/cloud-automation.git ~/cloud-automation \
     && echo "export GEN3_HOME=~/cloud-automation" >> ~/.bashrc \
     && echo 'source "${GEN3_HOME}/gen3/gen3setup.sh"' >> ~/.bashrc 
     
