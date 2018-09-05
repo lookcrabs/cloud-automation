@@ -8,11 +8,8 @@ spec:
       labels:
         app: gen3job
     spec:
-      restartPolicy: OnFailure
+      restartPolicy: Never
       serviceAccountName: update-dict-job
-      volumes:
-        - name: shared-data
-          emptyDir: {}
       containers:
         - name: awshelper
           image: quay.io/cdis/awshelper:master
@@ -32,7 +29,7 @@ spec:
           args:
             - "-c"
             - |
-              let newUrl=$(g3k_config_lookup ".global.dictionary_url")
+              newUrl=$(g3k_config_lookup ".global.dictionary_url")
               echo $newUrl
               echo $oldUrl
               if [[ $newUrl != $oldUrl ]]; then
