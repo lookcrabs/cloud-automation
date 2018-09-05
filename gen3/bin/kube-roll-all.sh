@@ -23,6 +23,10 @@ else
   echo "INFO: certificate authority not available - skipping SSL cert check"
 fi
 
+if g3kubectl get configmaps manifest-global > /dev/null 2>&1; then
+  g3kubectl create -f "${GEN3_HOME}/kube/services/jobs/update-dict-job.yaml"
+fi
+
 gen3 roll indexd
 g3kubectl apply -f "${GEN3_HOME}/kube/services/portal/portal-service.yaml"
 g3kubectl apply -f "${GEN3_HOME}/kube/services/indexd/indexd-service.yaml"

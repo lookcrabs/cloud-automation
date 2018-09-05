@@ -24,7 +24,7 @@ spec:
                 - name: oldUrl
                   valueFrom:
                     configMapKeyRef:
-                      name: manifest_global
+                      name: manifest-global
                       key: dictionary_url
                 - name: gen3Env
                   valueFrom:
@@ -35,11 +35,11 @@ spec:
               args:
                 - "-c"
                 - |
-                  let currentUrl=$(g3k_config_lookup ".global.dictionary_url")
-                  echo $currentUrl
+                  let newUrl=$(g3k_config_lookup ".global.dictionary_url")
+                  echo $newUrl
                   echo $oldUrl
-                  if [[ $currentUrl != $oldUrl ]]; then
-                    g3kubectl patch configmap manifest_global -p ""
+                  if [[ $newUrl != $oldUrl ]]; then
+                    g3kubectl patch configmap manifest-global -p '{"data":{"dictionary_url": $newUrl}}'
                     gen3 kube-roll-all
                   fi
                   echo "Exit code: $?"
