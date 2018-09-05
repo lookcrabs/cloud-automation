@@ -29,6 +29,8 @@ spec:
           args:
             - "-c"
             - |
+              set -i
+              source ~/.bashrc
               newUrl=$(g3k_config_lookup ".global.dictionary_url")
               echo $newUrl
               echo $oldUrl
