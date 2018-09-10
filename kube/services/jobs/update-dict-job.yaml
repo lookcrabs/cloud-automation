@@ -25,6 +25,10 @@ spec:
                 configMapKeyRef:
                   name: global
                   key: environment
+            - name: JENKINS_HOME
+              value: none
+            - name: GEN3_NOPROXY
+              value: none
           command: ["/bin/bash" ]
           args:
             - "-c"
@@ -35,7 +39,7 @@ spec:
               echo $newUrl
               echo $oldUrl
               if [[ $newUrl != $oldUrl ]]; then
-                echo "Dictionary URLs are different updating dictionary"
+                echo "Dictionary URLs are different, updating dictionary"
                 g3kubectl patch configmap manifest-global -p '{"data":{"dictionary_url": "$newUrl"}}'
                 gen3 kube-roll-all
               else
