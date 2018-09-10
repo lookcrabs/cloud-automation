@@ -159,9 +159,9 @@ data:
       	##
         # Serve internet facing http requests via this, and redirect to https
         server {
-               listen      82 default_server proxy_protocol;
-               listen      83;
-               rewrite     ^   https://$host$request_uri? permanent;
+          listen      82 default_server proxy_protocol;
+          listen      83;
+          rewrite     ^   https://$host$request_uri? permanent;
         }
         # Serve internet facing https requests and internal http requests here
       	server {
@@ -181,6 +181,19 @@ data:
 
           if ($http_x_forwarded_proto = "http") { return 301 https://$host$request_uri; }
           
+          #
+          # From https://enable-cors.org/server_nginx.html
+          # This is somewhat problematic as the individual services
+          # may also set CORS headers
+          #
+          add_header 'Access-Control-Allow-Origin' "https://$host";
+          add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+          add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,Cookie';
+          add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+          if ($request_method = 'OPTIONS') {
+            return 204;
+          }
+
           #
           # DNS resolver required to resolve dynamic hostnames, btw - kubedns may not support ipv6
           # see https://www.nginx.com/blog/dns-service-discovery-nginx-plus/
